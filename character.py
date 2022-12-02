@@ -73,7 +73,7 @@ class UserInputs:
                 stats_worksheet.update_cell(2, 1, chosen_class)
                 UserInputs.get_subclass(self, chosen_class)
             else:
-                print("Please type one of the classes listed.")
+                print("Please type either Hunter, Warlock or Titan.")
                 continue
 
     def get_subclass(self, chosen_class):

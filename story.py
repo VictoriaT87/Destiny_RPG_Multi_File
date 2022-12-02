@@ -252,7 +252,7 @@ class Story:
                 function.s_print(self, text.CAPTAIN_FIGHT_RUN)
                 function.play_again(self)
             else:
-                print("Please enter either fight or run.")
+                print("Please enter either Fight or Run.")
                 continue
 
     def luck_escape(self):
