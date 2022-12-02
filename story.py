@@ -177,19 +177,19 @@ class Story:
 
         if stored_weapon is not None:
             function.s_print(self, "\nNow it's your turn!")
-            function.s_print(self, f"You pull out your {stored_weapon}")
+            function.s_print(self, f"You pull out your {stored_weapon}.")
             function.s_print(
-                self, "line up on the Dreg's head...\nand pull the trigger.")
+                self, "Line up on the Dreg's head...\nand pull the trigger.")
             function.s_print(self, "Nice work!")
             self.hallway_choice()
         else:
             function.s_print(self, "\nNow it's your turn!")
             function.s_print(
                 self, "You don't have a gun... but you do"
-                " have your abilities\n")
+                " have your abilities.\n")
             function.s_print(
                 self, f"You're a {player_class}. A {player_subclass}.")
-            function.s_print(self, f"You can use your {player_ability}")
+            function.s_print(self, f"You can use your {player_ability}.")
             function.s_print(self, "You throw it and it sticks to the Dreg")
             function.s_print(self, "and explodes in a burst of Light!\n")
             function.s_print(self, "Nice work! The Dreg is dust.")
