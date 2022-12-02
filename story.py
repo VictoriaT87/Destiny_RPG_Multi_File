@@ -10,8 +10,8 @@ import pyfiglet
 import gspread
 from google.oauth2.service_account import Credentials
 
-import functions
-import text
+from functions import GameFunctions as function
+import story_text as text
 import character
 
 
@@ -45,20 +45,27 @@ class Story:
         print(text1)
         print(text2)
 
-        text.introduction_text()
+        function.s_print(self, text.INTRODUCTION_TEXT)
 
-        functions.GameFunctions.clear_worksheet(self)
-        functions.GameFunctions.inital_luck(self)
-        character.UserInputs.get_name(self)
+        function.clear_worksheet(self)
+        function.inital_luck(self)
+
+        while True:
+            start = input("Press the ENTER key to begin!\n")
+            if start == "":
+                function.reset_console(self)
+                character.UserInputs.get_name(self)
+            else:
+                print(f"You typed '{start}'. When you're ready to"
+                      " begin. press ENTER.")
+                continue
 
     def opening_scene(self):
         """
         First scene to play after choosing a name and class
         """
 
-        text.first_scene_text()
-
-        user_input = ""
+        function.s_print(self, text.FIRST_SCENE_TEXT)
 
         while True:
             user_input = input("\n> ")
@@ -67,12 +74,12 @@ class Story:
             elif user_input == "2":
                 self.building_entrance()
             elif user_input == "3":
-                print("You run towards the cliff and jump! This is all "
-                      "too much to take. [END]")
-                functions.GameFunctions.clear_worksheet(self)
+                function.s_print(self, "You run towards the cliff and jump!"
+                                 " This is all too much to take. [END]")
+                function.clear_worksheet(self)
                 sys.exit()
             else:
-                print("Please enter a valid option.")
+                print("Please enter number 1, 2 or 3.")
                 continue
 
     def search_cars(self):
@@ -80,14 +87,16 @@ class Story:
         Function to search the cars
         """
 
-        print("You decide to search through some of the abandoned cars.")
-        functions.GameFunctions.check_items(self)
+        function.s_print(
+            self, "You decide to search through some of the abandoned cars.")
+        function.check_items(self)
 
         if character.guardian.items == ["key"]:
-            print("You put your key away and walk towards the building.")
+            function.s_print(self, "You put your key away and walk towards"
+                             " the building.")
             self.building_entrance()
         else:
-            print("But you didn't find anything")
+            function.s_print(self, "But you didn't find anything")
             self.building_entrance()
 
     def building_entrance(self):
@@ -95,32 +104,31 @@ class Story:
         Function to enter the building and try to open a chest
         """
 
-        text.entrance_text()
-        functions.GameFunctions.open_chest(self)
-        self.building_hallway()
+        function.s_print(self, text.ENTRANCE_TEXT)
+        function.open_chest(self)
 
     def building_hallway(self):
         """
         Function to play scene on entering the building hallway,
         call fight scene or end
         """
-        text.hallway_text()
-
-        user_input = ""
+        function.s_print(self, text.HALLWAY_TEXT)
 
         while True:
             user_input = input("\n> ")
             if user_input == "1":
-                print("You enter door 1. It's a small room with a Fallen Dreg"
-                      " inside!")
+                function.s_print(self, "You enter door 1. It's a small room"
+                                 " with a Fallen Dreg inside!")
                 self.dreg_fight()
             if user_input == "2":
-                print("You decide to enter the 2nd door. It's a small room.")
+                function.s_print(
+                    self, "You decide to enter the 2nd door."
+                    " It's a small room.")
                 self.empty_room()
             if user_input == "3":
                 self.spaceship_room()
             else:
-                print("Please enter a valid option.")
+                print("Please enter number 1, 2 or 3.")
                 continue
 
     def empty_room(self):
@@ -128,22 +136,20 @@ class Story:
         Empty room, player must turn around and choose another option
         from building_hallway
         """
-        functions.GameFunctions.handle_vandal(self)
+        function.handle_vandal(self)
 
-        text.empty_room_text()
-
-        user_input = ""
+        function.s_print(self, text.EMPTY_ROOM_TEXT)
 
         while True:
             user_input = input("\n> ")
             if user_input == "1":
-                print("You enter door 1. It's a small room with a Fallen Dreg"
-                      " inside!")
+                function.s_print(self, "You enter door 1. It's a small room"
+                                 " with a Fallen Dreg inside!")
                 self.dreg_fight()
             if user_input == "2":
                 self.spaceship_room()
             else:
-                print("Please enter a valid option.")
+                print("Please enter number 1 or 2.")
                 continue
 
     def dreg_fight(self):
@@ -159,56 +165,63 @@ class Story:
         # Health system from Elijah Henderson
         # https://www.youtube.com/watch?v=n17Hkgi8rt4
         character.guardian.health -= random.randint(1, 100)
-        print("\nBefore you can make a move, the Dreg takes one shot with "
-              "his weapon.\nIt hits you on the arm!"
-              )
+        function.s_print(self, "\nBefore you can make a move, the Dreg"
+                         " takes one shot with "
+                         "his weapon.\nIt hits you on the arm!"
+                         )
         print(f"\nHealth: {character.guardian.health}")
         if character.guardian.health < 0:
-            print("You are dead!\nWould you like to play again?")
-            functions.GameFunctions.play_again(self)
+            function.s_print(
+                self, "You are dead!\nWould you like to play again?")
+            function.play_again(self)
 
         if stored_weapon is not None:
-            print("\nNow it's your turn!")
-            print(f"You pull out your {stored_weapon}")
-            print("line up on the Dreg's head...\nand pull the trigger.")
-            print("Nice work!")
+            function.s_print(self, "\nNow it's your turn!")
+            function.s_print(self, f"You pull out your {stored_weapon}")
+            function.s_print(
+                self, "line up on the Dreg's head...\nand pull the trigger.")
+            function.s_print(self, "Nice work!")
             self.hallway_choice()
         else:
-            print("\nNow it's your turn!")
-            print("You don't have a gun... but you do have your abilities.\n")
-            print(f"You're a {player_class}. A {player_subclass}.")
-            print(f"You can use your {player_ability}")
-            print("You throw it and it sticks to the Dreg")
-            print("and explodes in a burst of Light!\n")
-            print("Nice work! The Dreg is dust.")
+            function.s_print(self, "\nNow it's your turn!")
+            function.s_print(
+                self, "You don't have a gun... but you do"
+                " have your abilities\n")
+            function.s_print(
+                self, f"You're a {player_class}. A {player_subclass}.")
+            function.s_print(self, f"You can use your {player_ability}")
+            function.s_print(self, "You throw it and it sticks to the Dreg")
+            function.s_print(self, "and explodes in a burst of Light!\n")
+            function.s_print(self, "Nice work! The Dreg is dust.")
             self.hallway_choice()
 
     def hallway_choice(self):
         """
         User chooses between 2 paths
         """
-        functions.GameFunctions.handle_vandal(self)
+        function.handle_vandal(self)
 
-        print("\n ")
-        print("Ahead, you see 2 corridors.")
-        print("Do you want to go left, right or back?")
-
-        user_input = ""
+        function.s_print(self, "\nAhead, you see 2 corridors. ")
+        function.s_print(self, "Do you want to go left, right or back?")
 
         while True:
             user_input = input("\n> ").capitalize()
             if user_input == "Left":
-                print("You go left and ahead of you see a giant room")
-                print("with a spaceship. You check it out.")
+                function.s_print(
+                    self, "You go left and ahead of you see a giant room")
+                function.s_print(self, "with a spaceship. You check it out.")
                 self.spaceship_room()
             elif user_input == "Right":
-                print("You go right. It's very hard to see.")
-                print("In the darkness, you can make out something large...")
-                print("with a glowing purple eye!")
+                function.s_print(self, "You go right. It's very hard to see.")
+                function.s_print(
+                    self, "In the darkness, you can make out something large")
+                function.s_print(self, "with a glowing purple eye!")
                 self.luck_escape()
             elif user_input == "Back":
-                print("'I'm done fighting these Dregs, I'm out of here!'[END]")
-                functions.GameFunctions.clear_worksheet(self)
+                function.s_print(
+                    self, "'I'm done fighting these Dregs, I'm out of here!"
+                    "'[END]")
+                function.clear_worksheet(self)
                 sys.exit()
             else:
                 print("Please enter either left, right or back.")
@@ -218,7 +231,7 @@ class Story:
         """
         Spaceship room choice function
         """
-        text.spaceship_room_text()
+        function.s_print(self, text.SPACESHIP_ROOM_TEXT)
 
         user_input = ""
 
@@ -228,16 +241,16 @@ class Story:
             user_input = input("\n> ").capitalize()
             if user_input == "Fight":
                 if luck >= "50":
-                    text.captain_fight_win_text()
-                    functions.GameFunctions.play_again(self)
+                    function.s_print(self, text.CAPTAIN_FIGHT_WIN_TEXT)
+                    function.play_again(self)
 
                 elif luck <= "49":
-                    text.captain_fight_lose_text()
-                    functions.GameFunctions.play_again(self)
+                    function.s_print(self, text.CAPTAIN_FIGHT_LOSE_TEXT)
+                    function.play_again(self)
 
             elif user_input == "Run":
-                text.captain_fight_run()
-                functions.GameFunctions.play_again(self)
+                function.s_print(self, text.CAPTAIN_FIGHT_RUN)
+                function.play_again(self)
             else:
                 print("Please enter either fight or run.")
                 continue
@@ -246,12 +259,12 @@ class Story:
         """
         Function to check whether the player escapes from the ambush
         """
-        if functions.GameFunctions.inital_luck(self) > 50:
-            text.luck_roll_win()
+        if function.inital_luck(self) > 50:
+            function.s_print(self, text.LUCK_ROLL_WIN)
             self.spaceship_room()
         else:
-            text.luck_roll_lose()
-            functions.GameFunctions.play_again(self)
+            function.s_print(self, text.LUCK_ROLL_LOSE)
+            function.play_again(self)
 
 
 def main():

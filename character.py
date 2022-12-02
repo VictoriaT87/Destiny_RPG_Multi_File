@@ -5,8 +5,9 @@ This file contains the classes for the users choices of character
 import gspread
 from google.oauth2.service_account import Credentials
 
-import text
+import story_text as text
 import story
+from functions import GameFunctions as function
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -42,7 +43,7 @@ class UserInputs:
         """
         Get the name of the player.
         """
-        text.choose_name_text()
+        function.s_print(self, text.CHOOSE_NAME_TEXT)
 
         while True:
             name = input("\n> ").capitalize()
@@ -52,21 +53,22 @@ class UserInputs:
             elif len(name.strip(" ")) < 3:
                 print("Please enter a name at least 3 letters long.")
             else:
-                print(f"It's nice to meet you, {name}. I'm your Ghost.")
-                UserInputs.get_class(self)
+                function.s_print(self, f"It's nice to meet you, {name}."
+                                 " I'm your Ghost.")
+                self.get_class()
         return name
 
     def get_class(self):
         """
         Player chooses their class. 3 available based on Destiny lore.
         """
-        text.choose_class_text()
+        function.s_print(self, text.CHOOSE_CLASS_TEXT)
 
         while True:
             chosen_class = input("My class is: \n> ").capitalize()
             classes = ["Hunter", "Warlock", "Titan"]
             if chosen_class in classes:
-                print(f"Welcome, {chosen_class}.")
+                function.s_print(self, f"Welcome, {chosen_class}.")
                 print("\n")
                 stats_worksheet.update_cell(2, 1, chosen_class)
                 UserInputs.get_subclass(self, chosen_class)
@@ -77,7 +79,7 @@ class UserInputs:
     def get_subclass(self, chosen_class):
         """Players choose their subclass - each class has 3."""
 
-        text.choose_subclass_text()
+        function.s_print(self, text.CHOOSE_SUBCLASS_TEXT)
 
         if chosen_class == "Hunter":
             subclasses = ['Nightstalker', 'Blade Dancer', 'Gunslinger']
@@ -93,14 +95,15 @@ class UserInputs:
 
         while True:
             try:
-                choice = int(input(f"\nMake your choice, {chosen_class}. \n"
-                                   "1, 2 or 3?\n>"))
+                choice = int(input(f"\nMake your choice, {chosen_class}."
+                                   "\n1, 2 or 3?\n>"))
+                if choice < 1 or choice > 3 or choice == str():
+                    raise ValueError("Please enter number 1, 2 or 3.")
             except ValueError:
-                print('Please enter number 1, 2 or 3.')
-
+                print("Please enter number 1, 2 or 3.")
             else:
-                print(f"A {subclasses[choice-1]}?")
-                print("The darkness doesn't stand a chance \n")
+                function.s_print(self, f"A {subclasses[choice-1]}?")
+                function.s_print(self, "The darkness doesn't stand a chance\n")
                 chosen_subclass = subclasses[choice-1]
                 stats_worksheet.update_cell(2, 2, chosen_subclass)
                 UserInputs.player_abilites(self, chosen_subclass)
