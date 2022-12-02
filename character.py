@@ -50,7 +50,7 @@ class UserInputs:
             # https://www.w3schools.com/python/ref_string_isalpha.asp
             if not name.isalpha():
                 print("Please enter letters only.")
-            elif len(name.strip(" ")) < 3:
+            elif len(name.strip(" ")) < 3 or len(name.strip(" ")) > 8:
                 print("Please enter a name at least 3 letters long.")
             else:
                 functions.GameFunctions.s_print(self, "It's nice to meet you,"
