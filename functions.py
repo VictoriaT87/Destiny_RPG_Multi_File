@@ -40,19 +40,20 @@ class GameFunctions:
         """
         Option to allow player to play again or exit
         """
-
         print("Yes or No?")
-        user_input = ""
-        user_input = input("\n> ").capitalize()
-        if user_input == "Yes":
-            GameFunctions.reset_console(self)
-            story.Story.introduction(self)
-        elif user_input == "No":
-            print("Thank you for playing, Guardian!")
-            GameFunctions.clear_worksheet(self)
-            sys.exit()
-        else:
-            print("Please enter Yes or No.")
+
+        while True:
+            user_input = input("\n> ").capitalize()
+            if user_input == "Yes":
+                GameFunctions.reset_console(self)
+                story.Story.introduction(self)
+            elif user_input == "No":
+                print("Thank you for playing, Guardian!")
+                GameFunctions.clear_worksheet(self)
+                sys.exit()
+            else:
+                print("Please enter Yes or No.")
+                continue
 
     def clear_worksheet(self):
         """
@@ -78,7 +79,7 @@ class GameFunctions:
         item_find = random.choice([True, False])
         if item_find is True:
             guardian.items.append("key")
-            print("You've found a key!")
+            GameFunctions.s_print(self, "You've found a key!")
 
     def open_chest(self):
         """Function to open the chest if player has a key"""
@@ -87,16 +88,18 @@ class GameFunctions:
             action = input("\n> ")
             if action == "yes" and guardian.items == ["key"]:
                 guardian.items.remove("key")
-                print("You've used your key!")
+                GameFunctions.s_print(self, "You've used your key!")
                 GameFunctions.check_weapon(self)
             elif action == "yes" and guardian.items == []:
-                print("You don't have a key and the lock won't budge.")
-                print("You decide to move on.\n")
+                GameFunctions.s_print(self, "You don't have a key and the"
+                                      " lock won't budge.")
+                GameFunctions.s_print(self, "You decide to move on.\n")
                 story.Story.building_hallway(self)
             elif action == "no":
-                print("The chest looks old and worn...")
-                print("You don't think you'll find anything of value "
-                      "in it.\nYou move into the building.")
+                GameFunctions.s_print(self, "The chest looks old and worn...")
+                GameFunctions.s_print(self, "You don't think you'll find"
+                                      " anything of value in it."
+                                      "\nYou move into the building.")
                 story.Story.building_hallway(self)
             else:
                 print("Please enter Yes or No.")
@@ -117,7 +120,7 @@ class GameFunctions:
                 "Gjallarhorn"
             ])
             stats_worksheet.update_cell(2, 4, weapon)
-            print(f"You've found a {weapon}!")
+            GameFunctions.s_print(self, f"You've found a {weapon}!")
             # if player finds a weapon, update their luck
             if stats_worksheet.cell(2, 5).value < "50":
                 character_luck = random.randint(50, 100)
@@ -126,7 +129,8 @@ class GameFunctions:
                 return weapon
 
         else:
-            print("There was nothing in the chest, only dust...")
+            GameFunctions.s_print(self, "There was nothing in the chest,"
+                                  " only dust...")
             story.Story.building_hallway(self)
 
     def handle_vandal(self):
@@ -136,13 +140,15 @@ class GameFunctions:
 
         vandal_attack = random.choice([True, False])
         if vandal_attack is True:
-            print("/nOut of nowhere, a Fallen Vandal attacks you!")
-            print("You took some damage :(")
+            GameFunctions.s_print(self, "\nOut of nowhere, a Fallen Vandal"
+                                  " attacks you!")
+            GameFunctions.s_print(self, "You took some damage :(")
             guardian.health -= random.randint(1, 100)
             print(f"\nHealth: {guardian.health}")
             if guardian.health < 0:
-                print("You are dead!")
-                print("Your Ghost can ressurect you. Do you want him to?")
+                GameFunctions.s_print(self, "You are dead!")
+                GameFunctions.s_print(
+                    self, "Your Ghost can ressurect you. Do you want him to?")
                 GameFunctions.play_again(self)
 
     def s_print(self, text):

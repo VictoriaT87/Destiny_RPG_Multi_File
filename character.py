@@ -51,11 +51,11 @@ class UserInputs:
             if not name.isalpha():
                 print("Please enter letters only.")
             elif len(name.strip(" ")) < 3 or len(name.strip(" ")) > 8:
-                print("Please enter a name at least 3 letters long.")
+                print("Please enter a name between 3 and 8 letters long.")
             else:
                 functions.GameFunctions.s_print(self, "It's nice to meet you,"
                                                 f" {name}. I'm your Ghost.")
-                self.get_class()
+                UserInputs.get_class(self)
         return name
 
     def get_class(self):
