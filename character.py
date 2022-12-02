@@ -7,7 +7,7 @@ from google.oauth2.service_account import Credentials
 
 import story_text as text
 import story
-from functions import GameFunctions as function
+import functions
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -43,7 +43,7 @@ class UserInputs:
         """
         Get the name of the player.
         """
-        function.s_print(self, text.CHOOSE_NAME_TEXT)
+        functions.GameFunctions.s_print(self, text.CHOOSE_NAME_TEXT)
 
         while True:
             name = input("\n> ").capitalize()
@@ -53,8 +53,8 @@ class UserInputs:
             elif len(name.strip(" ")) < 3:
                 print("Please enter a name at least 3 letters long.")
             else:
-                function.s_print(self, f"It's nice to meet you, {name}."
-                                 " I'm your Ghost.")
+                functions.GameFunctions.s_print(self, "It's nice to meet you,"
+                                                f" {name}. I'm your Ghost.")
                 self.get_class()
         return name
 
@@ -62,13 +62,14 @@ class UserInputs:
         """
         Player chooses their class. 3 available based on Destiny lore.
         """
-        function.s_print(self, text.CHOOSE_CLASS_TEXT)
+        functions.GameFunctions.s_print(self, text.CHOOSE_CLASS_TEXT)
 
         while True:
             chosen_class = input("My class is: \n> ").capitalize()
             classes = ["Hunter", "Warlock", "Titan"]
             if chosen_class in classes:
-                function.s_print(self, f"Welcome, {chosen_class}.")
+                functions.GameFunctions.s_print(
+                    self, f"Welcome, {chosen_class}.")
                 print("\n")
                 stats_worksheet.update_cell(2, 1, chosen_class)
                 UserInputs.get_subclass(self, chosen_class)
@@ -79,7 +80,7 @@ class UserInputs:
     def get_subclass(self, chosen_class):
         """Players choose their subclass - each class has 3."""
 
-        function.s_print(self, text.CHOOSE_SUBCLASS_TEXT)
+        functions.GameFunctions.s_print(self, text.CHOOSE_SUBCLASS_TEXT)
 
         if chosen_class == "Hunter":
             subclasses = ['Nightstalker', 'Blade Dancer', 'Gunslinger']
@@ -102,8 +103,10 @@ class UserInputs:
             except ValueError:
                 print("Please enter number 1, 2 or 3.")
             else:
-                function.s_print(self, f"A {subclasses[choice-1]}?")
-                function.s_print(self, "The darkness doesn't stand a chance\n")
+                functions.GameFunctions.s_print(
+                    self, f"A {subclasses[choice-1]}?")
+                functions.GameFunctions.s_print(self, "The darkness doesn't"
+                                                " stand a chance\n")
                 chosen_subclass = subclasses[choice-1]
                 stats_worksheet.update_cell(2, 2, chosen_subclass)
                 UserInputs.player_abilites(self, chosen_subclass)
