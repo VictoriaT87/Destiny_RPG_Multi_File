@@ -105,7 +105,7 @@ class UserInputs:
             else:
                 functions.GameFunctions.s_print(
                     self, f"A {subclasses[choice-1]}?")
-                functions.GameFunctions.s_print(self, "The darkness doesn't"
+                functions.GameFunctions.s_print(self, "The Darkness doesn't"
                                                 " stand a chance\n")
                 chosen_subclass = subclasses[choice-1]
                 stats_worksheet.update_cell(2, 2, chosen_subclass)

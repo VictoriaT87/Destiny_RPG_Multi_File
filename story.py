@@ -96,7 +96,7 @@ class Story:
                              " the building.")
             self.building_entrance()
         else:
-            function.s_print(self, "But you didn't find anything")
+            function.s_print(self, "But you didn't find anything.")
             self.building_entrance()
 
     def building_entrance(self):
