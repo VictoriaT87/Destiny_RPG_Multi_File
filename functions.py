@@ -145,7 +145,7 @@ class GameFunctions:
             GameFunctions.s_print(self, "You took some damage :(")
             guardian.health -= random.randint(1, 100)
             print(f"\nHealth: {guardian.health}")
-            if guardian.health < 0:
+            if guardian.health <= 0:
                 GameFunctions.s_print(self, "You are dead!")
                 GameFunctions.s_print(
                     self, "Your Ghost can ressurect you. Do you want him to?")
@@ -158,7 +158,7 @@ class GameFunctions:
         """
         text += "\n"
         for char in text:
-            time.sleep(0.05)
+            time.sleep(0.04)
             print(char, end="", flush=True)
 
 
