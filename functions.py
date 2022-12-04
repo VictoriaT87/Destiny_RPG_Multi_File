@@ -158,7 +158,7 @@ class GameFunctions:
         """
         text += "\n"
         for char in text:
-            time.sleep(0.04)
+            time.sleep(0.03)
             print(char, end="", flush=True)
 
 
